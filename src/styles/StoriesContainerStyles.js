@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
         color: #202020;
         background-color: #fafafe;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 16   px
+        font-size: 16px;
     }
 
     ul {
@@ -30,6 +30,13 @@ export const StoriesContainerWrapper = styled.main `
     max-width: 800px;
     padding:20px 15 px;
     margin: auto;
-    
-   
 `;
+export const StyledButton = styled.button`
+    margin-right: 40px;
+    background: ${({loadNewData}) => loadNewData ? `palevioletred` : `white`};
+    color: ${({loadNewData}) => loadNewData ? `white` : `palevioletred`};
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 6px;
+`;
+
