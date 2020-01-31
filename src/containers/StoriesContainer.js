@@ -21,9 +21,9 @@ export const StoriesContainer =  () =>  {
             <StoriesContainerWrapper data-testid="stories-container">
         
                 <h1>Hacker News Stories</h1>
-                <StyledButton loadNewData={dataUrl === newStoriesUrl }  onClick= {() => setdataUrl(newStoriesUrl)}>new stories</StyledButton>
-                <StyledButton loadNewData={ dataUrl === topStoriesUrl} onClick= {() => setdataUrl(topStoriesUrl)}>top stories</StyledButton>
-                <StyledButton loadNewData={dataUrl === bestStoriesUrl} onClick= {() => setdataUrl(bestStoriesUrl)}>best stories</StyledButton>
+                <StyledButton loadNewData={dataUrl === newStoriesUrl }  onClick= {() => setdataUrl(newStoriesUrl)}>New Stories</StyledButton>
+                <StyledButton loadNewData={ dataUrl === topStoriesUrl} onClick= {() => setdataUrl(topStoriesUrl)}>Top Stories</StyledButton>
+                <StyledButton loadNewData={dataUrl === bestStoriesUrl} onClick= {() => setdataUrl(bestStoriesUrl)}>Best Stories</StyledButton>
 
                 { 
                 ids.slice(0, count).map(storyId => (
