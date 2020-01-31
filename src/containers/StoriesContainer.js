@@ -1,38 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import {getStoryIds, newStoriesUrl, topStoriesUrl} from '../services/hnAPI'
+import {getStoryIds, newStoriesUrl, topStoriesUrl, bestStoriesUrl} from '../services/hnAPI'
 import {Story} from '../components/Story'
 import {GlobalStyle, StoriesContainerWrapper, StyledButton} from '../styles/StoriesContainerStyles'
 import {useInfiniteScroll } from '../hooks/useInfiniteScroll'
 export const StoriesContainer =  () =>  {
 
-    const  [newStoryIds, setNewStoryIds] = useState([])
-    const  [topStoryIds, setTopStoryIds] = useState([])
-    const [loadNewData, setLoadData] = useState(true)
-
+    
+    const [dataUrl, setdataUrl] = useState(newStoriesUrl)
+    const [ids, setIds] = useState([])
     const {count} = useInfiniteScroll();    
     useEffect(() => {
-        getStoryIds(newStoriesUrl).then(data =>  data && setNewStoryIds(data)
+        
+        getStoryIds(dataUrl).then(data =>  data && setIds(data)
         )
-    }, [])
+    }, [dataUrl])
 
-     useEffect(() => {
-        getStoryIds(topStoriesUrl).then(data =>  data && setTopStoryIds(data)        )
-    }, [])
-    
-       
     return (
       <>
         <GlobalStyle />
             <StoriesContainerWrapper data-testid="stories-container">
         
                 <h1>Hacker News Stories</h1>
-                <StyledButton loadNewData={loadNewData}  onClick= {() => setLoadData(true)}>new stories</StyledButton>
-                <StyledButton loadNewData={!loadNewData} onClick= {() => setLoadData(false)}>top stories</StyledButton>
-                { loadNewData ?
-                newStoryIds.slice(0, count).map(storyId => (
-                <Story key={storyId} storyId={storyId}/>
-                )) :
-                 topStoryIds.slice(0, count).map(storyId => (
+                <StyledButton loadNewData={dataUrl === newStoriesUrl }  onClick= {() => setdataUrl(newStoriesUrl)}>new stories</StyledButton>
+                <StyledButton loadNewData={ dataUrl === topStoriesUrl} onClick= {() => setdataUrl(topStoriesUrl)}>top stories</StyledButton>
+                <StyledButton loadNewData={dataUrl === bestStoriesUrl} onClick= {() => setdataUrl(bestStoriesUrl)}>best stories</StyledButton>
+
+                { 
+                ids.slice(0, count).map(storyId => (
                 <Story key={storyId} storyId={storyId}/>
                 ))}
             </StoriesContainerWrapper>

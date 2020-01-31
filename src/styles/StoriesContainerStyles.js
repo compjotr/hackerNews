@@ -36,6 +36,7 @@ export const StyledButton = styled.button`
     background: ${({loadNewData}) => loadNewData ? `palevioletred` : `white`};
     color: ${({loadNewData}) => loadNewData ? `white` : `palevioletred`};
     border: 1px solid black;
+    font-size:16px;
     padding: 10px 20px;
     border-radius: 6px;
 `;
