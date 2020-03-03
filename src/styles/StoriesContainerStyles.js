@@ -39,5 +39,10 @@ export const StyledButton = styled.button`
     font-size:16px;
     padding: 10px 20px;
     border-radius: 6px;
+    cursor: pointer;
+    &:hover {
+        background-color: palevioletred;
+        color:white
+    }
 `;
 

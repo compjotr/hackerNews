@@ -1,36 +1,79 @@
-import React, {useEffect, useState} from 'react';
-import {getStoryIds, newStoriesUrl, topStoriesUrl, bestStoriesUrl} from '../services/hnAPI'
-import {Story} from '../components/Story'
-import {GlobalStyle, StoriesContainerWrapper, StyledButton} from '../styles/StoriesContainerStyles'
-import {useInfiniteScroll } from '../hooks/useInfiniteScroll'
-export const StoriesContainer =  () =>  {
+import React, { useEffect, useState } from "react";
+import {useSelector, useDispatch} from 'react-redux'
 
-    
-    const [dataUrl, setdataUrl] = useState(newStoriesUrl)
-    const [ids, setIds] = useState([])
-    const {count} = useInfiniteScroll();    
-    useEffect(() => {
-        
-        getStoryIds(dataUrl).then(data =>  data && setIds(data)
-        )
-    }, [dataUrl])
+import {
+  getStoryIds,
+  newStoriesUrl,
+  topStoriesUrl,
+  bestStoriesUrl
+} from "../services/hnAPI";
+import { Story } from "../components/Story";
+import {
+  GlobalStyle,
+  StoriesContainerWrapper,
+  StyledButton
+} from "../styles/StoriesContainerStyles";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 
-    return (
-      <>
-        <GlobalStyle />
-            <StoriesContainerWrapper data-testid="stories-container">
-        
-                <h1>Hacker News Stories</h1>
-                <StyledButton loadNewData={dataUrl === newStoriesUrl }  onClick= {() => setdataUrl(newStoriesUrl)}>New Stories</StyledButton>
-                <StyledButton loadNewData={ dataUrl === topStoriesUrl} onClick= {() => setdataUrl(topStoriesUrl)}>Top Stories</StyledButton>
-                <StyledButton loadNewData={dataUrl === bestStoriesUrl} onClick= {() => setdataUrl(bestStoriesUrl)}>Best Stories</StyledButton>
+ export const StoriesContainer = () => {
+  const [dataUrl, setdataUrl] = useState(newStoriesUrl);
+  const [ids, setIds] = useState([]);
+  const [favoriteSelected, setFavoriteSelected] = useState(false)
+  const { count } = useInfiniteScroll();
+  
+   
+  const favoriteStories = useSelector(state => state.favoriteReducer)
 
-                { 
-                ids.slice(0, count).map(storyId => (
-                <Story key={storyId} storyId={storyId}/>
-                ))}
-            </StoriesContainerWrapper>
-         </>
-         );
-    };
 
+  useEffect(() => {
+    getStoryIds(dataUrl).then(data => data && setIds(data));
+  }, [dataUrl]);
+
+
+  return (
+    <>
+      <GlobalStyle />
+      <StoriesContainerWrapper data-testid='stories-container'>
+        <h1>Hacker News Stories</h1>
+        <StyledButton
+          loadNewData={dataUrl === newStoriesUrl && !favoriteSelected}
+          onClick={() => {setdataUrl(newStoriesUrl);
+            setFavoriteSelected(false);
+          }}>
+          New Stories
+        </StyledButton>
+        <StyledButton
+          loadNewData={dataUrl === topStoriesUrl & !favoriteSelected}
+          onClick={() => {setdataUrl(topStoriesUrl)
+            setFavoriteSelected(false);
+          }}>
+          Top Stories
+        </StyledButton>
+        <StyledButton
+          loadNewData={dataUrl === bestStoriesUrl & !favoriteSelected}
+          onClick={() => {setdataUrl(bestStoriesUrl);
+          setFavoriteSelected(false);
+          }}>
+          Best Stories
+
+        </StyledButton>
+        <StyledButton
+          loadNewData={favoriteSelected}
+
+          onClick={() => setFavoriteSelected(true)}
+          >
+          Favorite Stories
+        </StyledButton>
+        {favoriteSelected ?   favoriteStories.map(story => (
+          <Story addedToFav={true}  key={story.id} storyId={story.id} />
+        )) :
+        ids.slice(0, count).map(storyId => (
+          <Story addedToFav={false} key={storyId} storyId={storyId} />
+        ))}
+ 
+      </StoriesContainerWrapper>
+    </>
+  );
+};
+
+ 
