@@ -64,17 +64,17 @@ export const Story = memo(function Story({ storyId }) {
       <div style={textRow} data-testid='story-time'>     
 
       <span style={coloredBold} onClick={() => toggleComments()}>Comments: </span>
-      {story.kids === undefined ? <span>No comments</span> :  null}
-</div>
-          {story.kids !== undefined && showComments?
-            story.kids.map( commentId => (
-              <Comment key={commentId} showComments={showComments} commentId={commentId} /> 
-              
+        {story.kids === undefined ? <span>No comments</span> :  null}
+      </div>
+        {story.kids !== undefined && showComments?
+          story.kids.map( commentId => (
+            <Comment key={commentId} showComments={showComments} commentId={commentId} />           
             )): null
-
-          }
-  <div style={textRow} >
-  <span onClick={() => reduxAction()} style={coloredBoldPointer}>{readinglistText}</span>
+        }
+      <div style={textRow} >
+      
+      <span onClick={() => reduxAction()} style={coloredBoldPointer}>{readinglistText}</span>
+      
       {renderEmptyHeart ? <FaHeart style={{cursor:'pointer'}}onClick={() => reduxAction()} /> :  <FaRegHeart style={{cursor:'pointer'}} onClick={() => reduxAction()}/> }
       </div>
       <hr style={hrTag}></hr>

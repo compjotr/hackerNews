@@ -12,14 +12,24 @@ const [closeComments, setCloseComments] = useState(false)
         getComment(comment.commentId).then(data => setCommentData(data))
     })
 
+  const returnHTML = () =>{
+    if(commentData.text !== undefined){
+    let body = commentData.text
+    return (
+     <div  dangerouslySetInnerHTML={{__html: body}} />)
+  }
+}
   
-    
+
+  
+  
     return (
         <div>
 
             {showComments  ?
             <>
-             <span onClick={() => setCloseComments(true)}> {commentData.text}  </span> 
+            
+             <span onClick={() => setCloseComments(true)}> {returnHTML()}  </span> 
              <hr style={hrTag}></hr>
 
              </>: null  
