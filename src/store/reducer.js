@@ -12,6 +12,9 @@ const favoriteReducer = (state = [], action) => {
 
         case "REMOVE":
             return state.filter(payload => payload.id !== action.payload.id)
+        
+        case "SET_STORIES_FROM_DB":
+            return {stories: action.payload}
         default: 
             return state
     }

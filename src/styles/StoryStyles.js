@@ -55,4 +55,5 @@ export const StoryMetaElement = styled.span `
     font-weight: bold;
     font-size: 14px;
     color: ${props => props.color || 'green'};
+    
 `;

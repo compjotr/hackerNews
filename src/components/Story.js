@@ -1,57 +1,85 @@
 import React, { useState, useEffect, memo } from "react";
 import { getStory } from "../services/hnAPI";
-import {
-  StoryWrapper,
-  StoryTitle,
-  StoryMeta,
-  StoryMetaElement
-} from "../styles/StoryStyles";
-import {useSelector, useDispatch} from 'react-redux'
+import { Comment} from './Comment'
+import { FaRegHeart, FaHeart, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useDispatch} from 'react-redux'
 import allActions from '../actions/index'
+import { mapTime } from '../mappers/mapTime';
+import {saveLocalState} from '../services/localStorage'
+import {storyWrapper, title, textRow, coloredBold, coloredBoldPointer,hrTag
+} from  '../styles/globalStyles'
 
-import { mapTime } from "../mappers/mapTime";
-export const Story = memo(function Story({ storyId , addedToFav}) {
-
+export const Story = memo(function Story({ storyId }) {
+  const addToReadingList = "Add to reading list: "
+  const removeFromReadingList = "Remove from reading list: "
   const dispatch = useDispatch()
   const [story, setstory] = useState({});
-  const [favButtonText, setFavButtonText] = useState(" Add to favorites")
+  const [renderEmptyHeart, setRenderEmptyHeart] = useState(false)
+  const [readinglistText, setReadngListText] = useState(addToReadingList)
+  const [showComments, setShowComments] = useState(false)
   useEffect(() => {
     getStory(storyId).then(data => data && data.url && setstory(data) && console.log(data));
-  }, []);
+  }, [storyId]);
+
+  const toggleComments = () =>{
+    const toggler = showComments
+    setShowComments(!toggler)
+  }
 
   const reduxAction =  () => {
-    if(addedToFav){
+    console.log("reduxaction kjører")
+    if(renderEmptyHeart){
       dispatch( allActions.favoriteAction.removeFromFavorites(story))
-      setFavButtonText("Add to favorites")
+      setRenderEmptyHeart(false)
+      setReadngListText(addToReadingList)
+      saveLocalState()
     }
     else{
       dispatch( allActions.favoriteAction.addToFavorites(story) )
-      setFavButtonText("remove from favorites")
+      setRenderEmptyHeart(true)
+      setReadngListText(removeFromReadingList)
+      saveLocalState()
+
     }
   }
 
   return story && story.url ? (
-    <StoryWrapper data-testid='story'>
-      <StoryTitle>
-        <a href={story.url} target='_blank'>
-          <p>{story.title}</p>
+    <div style={storyWrapper} data-testid='story'>
+      <h1 style={title}>
+        <a style={title} href={story.url} target='_blank' rel="noopener noreferrer">
+          <span>{story.title}</span>
         </a>
-      </StoryTitle>
-      <StoryMeta>
-        <span data-testid='story-by'>
-          <StoryMetaElement> By: </StoryMetaElement>
-          {story.by}
-        </span>
-      </StoryMeta>
-      <StoryMeta>
-        <span data-testid='story-time'>
-          <StoryMetaElement> Posted: </StoryMetaElement>
-          {mapTime(story.time)}
-        </span>
-      </StoryMeta>
-      <button   onClick={() => reduxAction()}>
-        { favButtonText }
- </button>
-    </StoryWrapper>
+      </h1>
+      <div style={textRow} data-testid='story-by' >
+    
+          <span style={coloredBold}> By: </span>
+          <span>{story.by}</span>
+      </div>
+      <div style={textRow} data-testid='story-time'>     
+    
+          <span style={coloredBold}> Posted: </span>
+          <span>{mapTime(story.time)}</span>
+         
+      </div>
+      <div style={textRow} data-testid='story-time'>     
+
+      <span style={coloredBold} onClick={() => toggleComments()}>Comments: </span>
+      {story.kids === undefined ? <span>No comments</span> :  null}
+</div>
+          {story.kids !== undefined && showComments?
+            story.kids.map( commentId => (
+              <Comment key={commentId} showComments={showComments} commentId={commentId} /> 
+              
+            )): null
+
+          }
+  <div style={textRow} >
+  <span onClick={() => reduxAction()} style={coloredBoldPointer}>{readinglistText}</span>
+      {renderEmptyHeart ? <FaHeart style={{cursor:'pointer'}}onClick={() => reduxAction()} /> :  <FaRegHeart style={{cursor:'pointer'}} onClick={() => reduxAction()}/> }
+      </div>
+      <hr style={hrTag}></hr>
+
+    </div>
   ) : null;
 });
+ 
