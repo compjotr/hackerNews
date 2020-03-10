@@ -23,7 +23,12 @@ const addToFavorites = (story) => {
     }
 }
 
-
+const ToggleShowComments = (story) => {
+    return {
+        type : "TOOGLE_COMMENTS",
+        payload: story
+    }
+}
 const removeFromFavorites = (story) => {
     return {
         type: "REMOVE",
@@ -33,5 +38,6 @@ const removeFromFavorites = (story) => {
 export default {
     addToFavorites,
     removeFromFavorites,
-    addFavoritesFromDB
+    addFavoritesFromDB,
+    ToggleShowComments
 }

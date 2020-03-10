@@ -9,7 +9,7 @@ export const storyUrl = `${baseUrl}item/`;
 
 
 export const getStory = async (storyId) => {
-    const story = await axios.get(`${storyUrl + storyId}.json`).then(({data}) => selectField(data))
+    const story = await axios.get(`${storyUrl + storyId}.json`).then(({data}) => selectField(data)).catch(err=> console.log("error loading story ", err))
     .catch(err => console.log("error getting story", err))
     return story
 }
@@ -19,12 +19,8 @@ export const getStoryIds = async (url) => {
     return getData
 }
 export const getComment = async (commentId) => {
-    const getComment = await axios.get(`${storyUrl + commentId}.json`).then(({data}) => selectCommentFields(data) )
+  
+    const getComment = await axios.get(`${storyUrl + commentId}.json`).then(({data}) => data ).catch(err=> console.log("error loading comment", err))
     return getComment
+    
 }
-/*export const getComments = async (comments) => {
-    if(comments !== undefined){
-    const getComments = await axios.get(`${storyUrl + comments[0]}.json`).then(({data}) => console.log("dette er første  comment til en story: ", data))
-    return getComments
-    }
-}*/

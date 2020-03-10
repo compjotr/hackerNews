@@ -51,6 +51,9 @@ export const ButtonStyle = {
     marginTop: '10px',
     fontSize: '1.6em !important'
   }
+
+ 
+  
   export const coloredBold = {
     fontWeight: 'bold',
     color: 'green',
