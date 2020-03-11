@@ -1,53 +1,76 @@
+import React, { useEffect, useState } from "react";
+import { getComment } from "../services/hnAPI";
+import {
+  hrTag,
+  textRow,
+  coloredBold,
+  pinkCommentLine,
+  loadMoreButtonStyle
+} from "../styles/globalStyles";
+import { mapTime } from "../mappers/mapTime";
+import { SubComment } from "./SubComments";
 
-import React, { useEffect, useState, Component } from "react";
-import {getComment} from '../services/hnAPI'
-import {hrTag, textRow, coloredBold} from '../styles/globalStyles'
-import { mapTime } from '../mappers/mapTime';
 export const Comment = (comment, showComments) => {
+  const [commentData, setCommentData] = useState({});
+  const [showSubComments, setShowSubComments] = useState(false);
+  const [showButton, setShowButton] = useState(true);
 
-const [commentData, setCommentData] = useState({})
-const [showCom, setShowCom] = useState(showComments)
-const [closeComments, setCloseComments] = useState(false)
-    useEffect(() => {
-        let fetch = true
-        if(fetch){
-        getComment(comment.commentId).then(data => setCommentData(data))
+  useEffect(() => {
+    let fetch = true;
+    if (fetch) {
+      console.log("comments render");
+      getComment(comment.commentId).then(data => setCommentData(data));
     }
-    fetch = false
-    })
+    fetch = false;
+  }, [comment]);
 
-  const returnHTML = () =>{
-    if(commentData.text !== undefined){
-    let body = commentData.text
-    return (
-     <div  dangerouslySetInnerHTML={{__html: body}} />)
-  }
-}
-  
+  const returnHTML = () => {
+    if (commentData.text !== undefined) {
+      let body = commentData.text;
+      return <div dangerouslySetInnerHTML={{ __html: body }} />;
+    }
+  };
+  const setShowCommentButton = boo => {
+    setShowSubComments(boo);
+    setShowButton(!boo);
+  };
 
-  
-  
-    return commentData ? (
+  return commentData ? (
+    <div>
+      {showComments ? (
         <>
-
-            {showComments  ?
-            <>
-              <hr style={hrTag}></hr>  
-            <div style={textRow}>
+         <hr style={hrTag}></hr>
+          <div style={textRow}>
             <span style={coloredBold}>by</span>
             <span>{commentData.by}</span>
-            </div>
           
-            <div style={textRow}>
-              
-             <span style={coloredBold}>Posted</span>
-            <span style={{marginBottom:'20px'}}>{mapTime(commentData.time)}</span>
-            </div>
-             <span onClick={() => setCloseComments(true)}> {returnHTML()}  </span> 
-             <hr style={hrTag}></hr>
-            </>
-             : null  
-            }
+      <span style={coloredBold}>Posted</span>
+            <span style={{ marginBottom: "20px" }}>
+              {mapTime(commentData.time)}
+            </span>
+          </div>
+          <span > {returnHTML()} </span>
         </>
-    ) : null 
-}
+      ) : null}
+
+      {showSubComments ? <div style={pinkCommentLine}></div> : null}
+      {showSubComments
+        ? commentData.kids.map(commentId => (
+            <SubComment
+              key={commentId}
+              showComments={showComments}
+              commentId={commentId}
+            />
+          ))
+        : null}
+
+      {commentData.kids !== undefined ? (
+        <button
+          style={loadMoreButtonStyle}
+          onClick={() => setShowCommentButton(showButton)}>
+          {showButton ? "show sub comments" : "Hide sub comments"}
+        </button>
+      ) : null}
+    </div>
+  ) : null;
+};
