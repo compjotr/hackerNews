@@ -7,11 +7,9 @@ export const SubComment = comment => {
   const [subCommentData, setSubCommentData] = useState({});
 
   useEffect(() => {
-    let fetch = true;
-    if (fetch) {
+  
       getComment(comment.commentId).then(data => setSubCommentData(data));
-    }
-    fetch = false;
+    
   }, [comment]);
 
   const returnHTML = () => {

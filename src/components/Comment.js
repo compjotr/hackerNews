@@ -16,12 +16,9 @@ export const Comment = (comment, showComments) => {
   const [showButton, setShowButton] = useState(true);
 
   useEffect(() => {
-    let fetch = true;
-    if (fetch) {
       console.log("comments render");
       getComment(comment.commentId).then(data => setCommentData(data));
-    }
-    fetch = false;
+    
   }, [comment]);
 
   const returnHTML = () => {
