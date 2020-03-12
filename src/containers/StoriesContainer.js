@@ -86,10 +86,10 @@ import allActions from '../actions/index'
         </button>
         </div>
         {favoriteSelected && favoriteStories !== undefined ?   favoriteStories.map(story => (
-          <Story   key={story.id} storyId={story.id} />
+          <Story  readLater={true} key={story.id} storyId={story.id} />
         )) :
         ids.slice(0, count).map(storyId => (
-          <Story key={storyId} storyId={storyId} />
+          <Story readLater={false} key={storyId} storyId={storyId} />
         ))}
  
       </div>

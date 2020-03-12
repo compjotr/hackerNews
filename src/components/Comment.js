@@ -41,16 +41,14 @@ export const Comment = (comment, showComments) => {
             <span style={coloredBold}>by</span>
             <span>{commentData.by}</span>
           
-      <span style={coloredBold}>Posted</span>
-            <span style={{ marginBottom: "20px" }}>
-              {mapTime(commentData.time)}
+            <span style={{ marginBottom: "20px", marginLeft:"7px" }}>
+      {mapTime(commentData.time)}
             </span>
           </div>
           <span > {returnHTML()} </span>
         </>
       ) : null}
 
-      {showSubComments ? <div style={pinkCommentLine}></div> : null}
       {showSubComments
         ? commentData.kids.map(commentId => (
             <SubComment

@@ -16,7 +16,7 @@ import {
   loadMoreButtonStyle
 } from "../styles/globalStyles";
 
-export const Story = memo(function Story({ storyId }) {
+export const Story = memo(function Story({ storyId, readLater }) {
   const addToReadingList = "Add to reading list: ";
   const removeFromReadingList = "Remove from reading list: ";
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ export const Story = memo(function Story({ storyId }) {
   const [readinglistText, setReadngListText] = useState(addToReadingList);
   const [showComments, setShowComments] = useState(false);
   const [count, setCount] = useState(2);
+  const [readLaterSelected, setReadLaterSelected] = useState(readLater)
   useEffect(() => {
     getStory(storyId).then(
       data => data && data.url && setstory(data) && console.log(data)
@@ -38,14 +39,17 @@ export const Story = memo(function Story({ storyId }) {
 
   const reduxAction = () => {
     console.log("reduxaction kjører");
-    if (renderEmptyHeart) {
+    if (readLaterSelected) {
       dispatch(allActions.favoriteAction.removeFromFavorites(story));
       setRenderEmptyHeart(false);
+      setReadLaterSelected(false)
+
       setReadngListText(addToReadingList);
       saveLocalState();
     } else {
       dispatch(allActions.favoriteAction.addToFavorites(story));
       setRenderEmptyHeart(true);
+      setReadLaterSelected(true)
       setReadngListText(removeFromReadingList);
       saveLocalState();
     }
@@ -75,7 +79,7 @@ export const Story = memo(function Story({ storyId }) {
         <span onClick={() => reduxAction()} style={coloredBoldPointer}>
           {readinglistText}
         </span>
-        {renderEmptyHeart ? (
+        {readLaterSelected ? (
           <FaHeart
             style={{ cursor: "pointer" }}
             onClick={() => reduxAction()}
@@ -92,7 +96,7 @@ export const Story = memo(function Story({ storyId }) {
           style={story.kids === undefined ? coloredBold : coloredBoldPointer}
           onClick={() => toggleComments()}>
           {" "}
-          {story.kids === undefined ? "No comments" : "Comments"}{" "}
+          {story.kids === undefined ? "No comments" :  showComments ? "Hide comments": "Comments"}{" "}
         </span>
       </div>
 

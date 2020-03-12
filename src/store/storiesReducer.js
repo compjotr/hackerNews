@@ -1,8 +1,20 @@
+const containsObject = (obj, list) => {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 const favoriteReducer = (state = [], action) => {
     switch(action.type){
         case "ADD":
             return [
                 ...state,
+                containsObject(action.payload, state) ? null :
                 {
                   id: action.payload.id,
                   title: action.payload.title,

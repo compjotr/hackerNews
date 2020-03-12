@@ -1,7 +1,8 @@
 import favoriteAction from './favoriteAction'
-
+import changeUrl from './urlActions'
 const allActions = {
-    favoriteAction
+    favoriteAction,
+    changeUrl
 }
 
 export default allActions
