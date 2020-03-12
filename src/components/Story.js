@@ -96,7 +96,7 @@ export const Story = memo(function Story({ storyId, readLater }) {
           style={story.kids === undefined ? coloredBold : coloredBoldPointer}
           onClick={() => toggleComments()}>
           {" "}
-          {story.kids === undefined ? "No comments" :  showComments ? "Hide comments": "Comments"}{" "}
+          {story.kids === undefined ? "No comments" :  showComments ? "Hide comments": "Comments  "}{" "}
         </span>
       </div>
 
