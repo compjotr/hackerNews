@@ -89,7 +89,7 @@ import allActions from '../actions/index'
           <Story  readLater={true} key={story.id} storyId={story.id} />
         )) :
         ids.slice(0, count).map(storyId => (
-          <Story readLater={false} key={storyId} storyId={storyId} />
+          <Story storyUrl={dataUrl}readLater={false} key={storyId} storyId={storyId} />
         ))}
  
       </div>

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import allActions from "../actions/index";
 import { mapTime } from "../mappers/mapTime";
 import { saveLocalState } from "../services/localStorage";
+import {addStory} from "../services/db"
 import {
   storyWrapper,
   title,
@@ -16,7 +17,7 @@ import {
   loadMoreButtonStyle
 } from "../styles/globalStyles";
 
-export const Story = memo(function Story({ storyId, readLater }) {
+export const Story = memo(function Story({ storyId, readLater,storyUrl }) {
   const addToReadingList = "Add to reading list: ";
   const removeFromReadingList = "Remove from reading list: ";
   const dispatch = useDispatch();
@@ -48,6 +49,9 @@ export const Story = memo(function Story({ storyId, readLater }) {
       saveLocalState();
     } else {
       dispatch(allActions.favoriteAction.addToFavorites(story));
+      const stry = { "id": story.id.toString() , "url": storyUrl}
+      console.log("dette jeg prøver å sende", stry)
+      addStory(stry)
       setRenderEmptyHeart(true);
       setReadLaterSelected(true)
       setReadngListText(removeFromReadingList);
